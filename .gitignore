@@ -28,3 +28,6 @@ replay_pid*
 local.properties
 gradle.properties
 config.properties
+config.py
+NetworkConfig.kt
+basecorreos.db

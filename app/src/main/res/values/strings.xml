@@ -1,3 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">ProyectoFinal</string>
+    <string name="app_name">Login App</string>
+    <string name="app_logo">Logo de la aplicación</string>
+
+    <!-- Login -->
+    <string name="login_titulo">Iniciar Sesión</string>
+    <string name="login_subtitulo">Ingresa tus credenciales</string>
+    <string name="correo_hint">Correo electrónico</string>
+    <string name="password_hint">Contraseña</string>
+    <string name="btn_login">Iniciar Sesión</string>
+    <string name="registro_link">¿No tienes cuenta? Regístrate</string>
+    <string name="registro_proximamente">Función de registro próximamente</string>
+
+    <!-- Validaciones -->
+    <string name="error_correo_vacio">El correo es requerido</string>
+    <string name="error_correo_invalido">Formato de correo inválido</string>
+    <string name="error_correo_no_registrado">El correo no está registrado</string>
+    <string name="error_password_vacio">La contraseña es requerida</string>
+    <string name="error_password_corto">La contraseña debe tener al menos 6 caracteres</string>
+    <string name="error_password_incorrecta">Contraseña incorrecta</string>
+    <string name="correo_invalido">Correo inválido</string>
+
+    <!-- Mensajes de Login -->
+    <string name="bienvenido">¡Bienvenido %s!</string>
+    <string name="usuario_bloqueado">⚠️ Usuario bloqueado. %s</string>
+    <string name="intentos_restantes">⚠️ Contraseña incorrecta. Te quedan %d intentos</string>
+    <string name="error_conexion">Error: %s</string>
+
+    <!-- Home -->
+    <string name="bienvenida_home">¡Hola, %s!</string>
+    <string name="home_avatar_description">Avatar del usuario</string>
+    <string name="home_welcome_default">¡Hola, Usuario!</string>
+    <string name="home_email_default">usuario@ejemplo.com</string>
+    <string name="home_success_message">✅ Has iniciado sesión correctamente</string>
+    <string name="btn_perfil">Ver mi perfil</string>
+    <string name="btn_configuracion">Configuración</string>
+    <string name="btn_cerrar_sesion">Cerrar Sesión</string>
+    <string name="version">Versión 1.0.0</string>
+    <string name="usuario_default">Usuario</string>
 </resources>
