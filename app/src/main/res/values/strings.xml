@@ -33,9 +33,35 @@
     <string name="home_welcome_default">¡Hola, Usuario!</string>
     <string name="home_email_default">usuario@ejemplo.com</string>
     <string name="home_success_message">✅ Has iniciado sesión correctamente</string>
+    <string name="btn_contactos">📞 Mis Contactos</string>
+    <string name="btn_recordatorios">📅 Recordatorios</string>
     <string name="btn_perfil">Ver mi perfil</string>
     <string name="btn_configuracion">Configuración</string>
     <string name="btn_cerrar_sesion">Cerrar Sesión</string>
     <string name="version">Versión 1.0.0</string>
     <string name="usuario_default">Usuario</string>
+
+    <!-- Contactos -->
+    <string name="contactos_titulo">Mis Contactos</string>
+    <string name="contactos_agregar">Agregar Contacto</string>
+    <string name="contactos_sin_contactos">No tienes contactos</string>
+    <string name="contactos_agregar_primero">Agrega tu primer contacto</string>
+    <string name="contacto_nombre_hint">Nombre completo</string>
+    <string name="contacto_telefono_hint">Teléfono</string>
+    <string name="contacto_empresa_hint">Empresa (opcional)</string>
+
+    <!-- Recordatorios -->
+    <string name="recordatorios_titulo">Recordatorios</string>
+    <string name="recordatorios_agregar">Agregar Recordatorio</string>
+    <string name="recordatorios_sin_recordatorios">No tienes recordatorios</string>
+    <string name="recordatorio_nombre_hint">Nombre del recordatorio</string>
+    <string name="recordatorio_contacto_hint">Seleccionar contacto</string>
+    <string name="recordatorio_requisiciones_hint">Requisiciones / Notas</string>
+    <string name="recordatorio_fecha_hint">Fecha (DD/MM/AAAA)</string>
+    <string name="recordatorio_hora_hint">Hora (HH:MM)</string>
+
+    <!-- Botones -->
+    <string name="btn_guardar">Guardar</string>
+    <string name="btn_cancelar">Cancelar</string>
+    <string name="btn_eliminar">Eliminar</string>
 </resources>

@@ -122,11 +122,13 @@ class LoginActivity : AppCompatActivity() {
                     mostrarLoading(false)
 
                     result.onSuccess { response ->
-                        Log.d(TAG, "Respuesta recibida - Success: ${response.success}")
+                        // ✅ CAMBIO AQUÍ: Usar isSuccess en lugar de success
+                        Log.d(TAG, "Respuesta recibida - isSuccess: ${response.isSuccess}, success field: ${response.success}, usuario: ${response.usuario}")
 
-                        if (response.success) {
+                        if (response.isSuccess) {
                             // Login exitoso
                             val nombreUsuario = response.usuario?.nombre ?: getString(R.string.usuario_default)
+                            val usuarioId = response.usuario?.id ?: -1
 
                             Toast.makeText(
                                 this,
@@ -136,6 +138,7 @@ class LoginActivity : AppCompatActivity() {
 
                             // Navegar a la siguiente pantalla
                             val intent = Intent(this, HomeActivity::class.java)
+                            intent.putExtra("USUARIO_ID", usuarioId)
                             intent.putExtra("NOMBRE_USUARIO", nombreUsuario)
                             intent.putExtra("CORREO_USUARIO", response.usuario?.correo ?: "")
                             startActivity(intent)

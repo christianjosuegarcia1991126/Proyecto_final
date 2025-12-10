@@ -2,9 +2,19 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- ⚠️ PERMISOS NECESARIOS -->
+    <!-- Permisos necesarios -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <!-- Permisos de Notificaciones -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <!-- Permisos de Alarmas (Android 12+) -->
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
+
+    <!-- Permiso para vibración -->
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
@@ -18,9 +28,7 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
 
-        <!-- 🔴 CORRECCIÓN: Agregar .loginapp al nombre del paquete -->
-
-        <!-- LoginActivity - Pantalla Principal -->
+        <!-- Actividad de Login (pantalla principal) -->
         <activity
             android:name=".loginapp.LoginActivity"
             android:exported="true"
@@ -32,12 +40,36 @@
             </intent-filter>
         </activity>
 
-        <!-- HomeActivity - Después del Login -->
+        <!-- Actividad Home (después del login) -->
         <activity
             android:name=".loginapp.HomeActivity"
             android:exported="false"
             android:screenOrientation="portrait"
             android:parentActivityName=".loginapp.LoginActivity" />
+
+        <!-- Actividad de Recordatorios -->
+        <activity
+            android:name=".loginapp.RecordatoriosActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".loginapp.HomeActivity" />
+
+        <!-- Actividad de Contactos -->
+        <activity
+            android:name=".loginapp.ContactosActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".loginapp.HomeActivity" />
+
+        <!-- ✅ CRÍTICO: BroadcastReceiver para notificaciones programadas -->
+        <receiver
+            android:name=".loginapp.notifications.NotificationReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.example.proyectofinal.NOTIFICATION_ACTION" />
+            </intent-filter>
+        </receiver>
 
     </application>
 

@@ -15,6 +15,10 @@ class HomeActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityHomeBinding
 
+    // Declarar las variables como propiedades de la clase para que sean accesibles en toda la actividad
+    private var usuarioId: Int = -1 // Asumiendo que el ID es un entero. Usamos -1 como valor por defecto.
+    private lateinit var nombreUsuario: String
+
     companion object {
         private const val TAG = "HomeActivity"
     }
@@ -28,8 +32,9 @@ class HomeActivity : AppCompatActivity() {
 
             Log.d(TAG, "HomeActivity iniciada correctamente")
 
-            // Obtener datos del usuario
-            val nombreUsuario = intent.getStringExtra("NOMBRE_USUARIO")
+            // Obtener datos del usuario del Intent y asignarlos a las propiedades de la clase
+            usuarioId = intent.getIntExtra("USUARIO_ID", -1) // Es importante que LoginActivity envíe este dato
+            nombreUsuario = intent.getStringExtra("NOMBRE_USUARIO")
                 ?: getString(R.string.usuario_default)
             val correoUsuario = intent.getStringExtra("CORREO_USUARIO") ?: ""
 
@@ -37,7 +42,7 @@ class HomeActivity : AppCompatActivity() {
             binding.tvBienvenida.text = getString(R.string.bienvenida_home, nombreUsuario)
             binding.tvCorreo.text = correoUsuario
 
-            Log.d(TAG, "Usuario: $nombreUsuario - Correo: $correoUsuario")
+            Log.d(TAG, "ID: $usuarioId - Usuario: $nombreUsuario - Correo: $correoUsuario")
 
             setupListeners()
 
@@ -55,6 +60,26 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun setupListeners() {
+        // Botón de Contactos
+        binding.btnContactos.setOnClickListener {
+            Log.d(TAG, "Navegando a Contactos")
+            val intent = Intent(this, ContactosActivity::class.java)
+            // Ahora 'usuarioId' y 'nombreUsuario' son accesibles aquí
+            intent.putExtra("USUARIO_ID", usuarioId)
+            intent.putExtra("NOMBRE_USUARIO", nombreUsuario)
+            startActivity(intent)
+        }
+
+        // Botón de Recordatorios
+        binding.btnRecordatorios.setOnClickListener {
+            Log.d(TAG, "Navegando a Recordatorios")
+            val intent = Intent(this, RecordatoriosActivity::class.java)
+            // También son accesibles aquí
+            intent.putExtra("USUARIO_ID", usuarioId)
+            intent.putExtra("NOMBRE_USUARIO", nombreUsuario)
+            startActivity(intent)
+        }
+
         // Botón de cerrar sesión
         binding.btnCerrarSesion.setOnClickListener {
             Log.d(TAG, "Cerrando sesión")
