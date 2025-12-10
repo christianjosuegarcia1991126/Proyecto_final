@@ -188,7 +188,7 @@ class NotificationHelper(private val context: Context) {
             )
 
             val builder = NotificationCompat.Builder(context, CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_calendar)
+                .setSmallIcon(android.R.drawable.ic_dialog_info)  // Ícono del sistema como respaldo
                 .setContentTitle("📅 $titulo")
                 .setContentText("👤 $contactoNombre")
                 .setStyle(
