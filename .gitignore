@@ -25,11 +25,11 @@ replay_pid*
 
 # Kotlin Gradle plugin data, see https://kotlinlang.org/docs/whatsnew20.html#new-directory-for-kotlin-data-in-gradle-projects
 .kotlin/
+poblar_base_datos.py
+recrear_base_datos.py
 local.properties
 gradle.properties
 config.properties
 config.py
 NetworkConfig.kt
 basecorreos.db
-poblar_base_datos.py
-recrear_base_datos.py
