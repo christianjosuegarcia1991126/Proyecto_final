@@ -31,3 +31,5 @@ config.properties
 config.py
 NetworkConfig.kt
 basecorreos.db
+poblar_base_datos.py
+recrear_base_datos.py
