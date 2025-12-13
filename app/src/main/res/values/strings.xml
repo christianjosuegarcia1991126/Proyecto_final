@@ -26,6 +26,7 @@
     <string name="usuario_bloqueado">⚠️ Usuario bloqueado. %s</string>
     <string name="intentos_restantes">⚠️ Contraseña incorrecta. Te quedan %d intentos</string>
     <string name="error_conexion">Error: %s</string>
+    <string name="error_desconocido">Error desconocido</string>
 
     <!-- Home -->
     <string name="bienvenida_home">¡Hola, %s!</string>

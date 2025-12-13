@@ -54,11 +54,85 @@ class Recordatorio(db.Model):
 @app.route('/auth/login', methods=['POST'])
 def login():
     data = request.json
-    usuario = Usuario.query.filter_by(correo=data['correo'].lower()).first()
-    if not usuario or not usuario.verificar_password(data['password']):
-        # Lógica de intentos fallidos
-        return jsonify({'error': 'Credenciales inválidas'}), 401
-    return jsonify({'mensaje': 'Login exitoso', 'usuario': {'id': usuario.id, 'nombre': usuario.nombre, 'correo': usuario.correo}}), 200
+    correo = data.get('correo', '').lower().strip()
+    password = data.get('password', '')
+
+    # Validar que se enviaron los datos
+    if not correo or not password:
+        return jsonify({
+            'success': False,
+            'mensaje': 'Correo y contraseña son requeridos'
+        }), 400
+
+    # Buscar usuario por correo
+    usuario = Usuario.query.filter_by(correo=correo).first()
+
+    # Si el usuario no existe
+    if not usuario:
+        return jsonify({
+            'success': False,
+            'mensaje': 'Correo no registrado'
+        }), 401
+
+    # Verificar si el usuario está bloqueado
+    if usuario.esta_bloqueado():
+        tiempo_restante = (usuario.bloqueado_hasta - datetime.utcnow()).total_seconds()
+        minutos = int(tiempo_restante // 60)
+        segundos = int(tiempo_restante % 60)
+
+        return jsonify({
+            'success': False,
+            'mensaje': f'Cuenta bloqueada. Intenta de nuevo en {minutos}m {segundos}s',
+            'bloqueado': True,
+            'bloqueado_hasta': usuario.bloqueado_hasta.isoformat()
+        }), 403
+
+    # Verificar contraseña
+    if not usuario.verificar_password(password):
+        # Incrementar intentos fallidos
+        usuario.intentos_fallidos += 1
+        intentos_restantes = 3 - usuario.intentos_fallidos
+
+        # Si alcanzó 3 intentos, bloquear cuenta
+        if usuario.intentos_fallidos >= 3:
+            # Bloquear por 15 segundos
+            usuario.bloqueado_hasta = datetime.utcnow() + timedelta(seconds=15)  # 15 segundos
+
+            usuario.intentos_fallidos = 0  # Resetear para el próximo ciclo
+            db.session.commit()
+
+            return jsonify({
+                'success': False,
+                'mensaje': 'Contraseña incorrecta. Cuenta bloqueada por 15 minutos',
+                'bloqueado': True,
+                'intentosRestantes': 0
+            }), 403
+
+        # Guardar intentos fallidos
+        db.session.commit()
+
+        return jsonify({
+            'success': False,
+            'mensaje': f'Contraseña incorrecta',
+            'intentosRestantes': intentos_restantes,
+            'bloqueado': False
+        }), 401
+
+    # ✅ Login exitoso - Resetear intentos fallidos
+    usuario.intentos_fallidos = 0
+    usuario.bloqueado_hasta = None
+    db.session.commit()
+
+    return jsonify({
+        'success': True,
+        'mensaje': 'Login exitoso',
+        'usuario': {
+            'id': usuario.id,
+            'nombre': usuario.nombre,
+            'correo': usuario.correo
+        }
+    }), 200
+
 
 @app.route('/contactos', methods=['GET'])
 def obtener_contactos():

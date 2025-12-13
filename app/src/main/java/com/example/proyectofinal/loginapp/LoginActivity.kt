@@ -173,14 +173,16 @@ class LoginActivity : AppCompatActivity() {
      * Maneja los diferentes tipos de error en el login
      */
     private fun manejarErrorLogin(response: LoginResponse) {
+        val mensajeError = response.mensaje ?: getString(R.string.error_desconocido)
+
         when {
             response.bloqueado -> {
                 // Usuario bloqueado
-                val mensajeCompleto = getString(R.string.usuario_bloqueado, response.mensaje)
+                val mensajeCompleto = getString(R.string.usuario_bloqueado, mensajeError)
 
                 Toast.makeText(
                     this,
-                    response.mensaje,
+                    mensajeError,
                     Toast.LENGTH_LONG
                 ).show()
 
@@ -192,7 +194,7 @@ class LoginActivity : AppCompatActivity() {
                 binding.tvMensajeError.visibility = View.VISIBLE
                 binding.tvMensajeError.text = mensajeCompleto
             }
-            response.mensaje.contains("Correo inválido", ignoreCase = true) -> {
+            mensajeError.contains("Correo inválido", ignoreCase = true) -> {
                 // Correo no existe
                 binding.tilCorreo.error = getString(R.string.error_correo_no_registrado)
                 Toast.makeText(this, R.string.correo_invalido, Toast.LENGTH_SHORT).show()
@@ -204,7 +206,7 @@ class LoginActivity : AppCompatActivity() {
                 val mensaje = if (response.intentosRestantes > 0) {
                     getString(R.string.intentos_restantes, response.intentosRestantes)
                 } else {
-                    response.mensaje
+                    mensajeError
                 }
 
                 binding.tvMensajeError.visibility = View.VISIBLE
@@ -213,7 +215,7 @@ class LoginActivity : AppCompatActivity() {
                 Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show()
             }
             else -> {
-                Toast.makeText(this, response.mensaje, Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, mensajeError, Toast.LENGTH_SHORT).show()
             }
         }
     }

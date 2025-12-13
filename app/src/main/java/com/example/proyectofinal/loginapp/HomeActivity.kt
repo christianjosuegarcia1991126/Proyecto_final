@@ -3,6 +3,7 @@ package com.example.proyectofinal.loginapp
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import com.example.proyectofinal.R
@@ -15,9 +16,9 @@ class HomeActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityHomeBinding
 
-    // Declarar las variables como propiedades de la clase para que sean accesibles en toda la actividad
-    private var usuarioId: Int = -1 // Asumiendo que el ID es un entero. Usamos -1 como valor por defecto.
+    private var usuarioId: Int = -1
     private lateinit var nombreUsuario: String
+    private lateinit var correoUsuario: String
 
     companion object {
         private const val TAG = "HomeActivity"
@@ -32,30 +33,42 @@ class HomeActivity : AppCompatActivity() {
 
             Log.d(TAG, "HomeActivity iniciada correctamente")
 
-            // Obtener datos del usuario del Intent y asignarlos a las propiedades de la clase
-            usuarioId = intent.getIntExtra("USUARIO_ID", -1) // Es importante que LoginActivity envíe este dato
-            nombreUsuario = intent.getStringExtra("NOMBRE_USUARIO")
-                ?: getString(R.string.usuario_default)
-            val correoUsuario = intent.getStringExtra("CORREO_USUARIO") ?: ""
+            // ✅ VALIDACIÓN: Verificar que se recibieron los datos del usuario
+            usuarioId = intent.getIntExtra("USUARIO_ID", -1)
+            nombreUsuario = intent.getStringExtra("NOMBRE_USUARIO") ?: ""
+            correoUsuario = intent.getStringExtra("CORREO_USUARIO") ?: ""
 
-            // Mostrar mensaje de bienvenida usando recursos
+            // Si no hay datos válidos, regresar al login
+            if (usuarioId == -1 || nombreUsuario.isEmpty()) {
+                Log.e(TAG, "❌ Datos de usuario inválidos. Regresando a login.")
+                Toast.makeText(
+                    this,
+                    "Error: Sesión no válida. Por favor, inicia sesión nuevamente.",
+                    Toast.LENGTH_LONG
+                ).show()
+                regresarALogin()
+                return
+            }
+
+            // Mostrar información del usuario
             binding.tvBienvenida.text = getString(R.string.bienvenida_home, nombreUsuario)
             binding.tvCorreo.text = correoUsuario
 
-            Log.d(TAG, "ID: $usuarioId - Usuario: $nombreUsuario - Correo: $correoUsuario")
+            Log.d(TAG, "✅ Usuario cargado - ID: $usuarioId, Nombre: $nombreUsuario, Correo: $correoUsuario")
 
             setupListeners()
 
-            // Deshabilitar el gesto de retroceso
+            // Deshabilitar el botón de retroceso
             onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    // No hacer nada para deshabilitar el botón de "Atrás"
                     Log.d(TAG, "Botón atrás deshabilitado")
                 }
             })
 
         } catch (e: Exception) {
-            Log.e(TAG, "Error al inicializar HomeActivity", e)
+            Log.e(TAG, "❌ Error al inicializar HomeActivity", e)
+            Toast.makeText(this, "Error al cargar la pantalla: ${e.message}", Toast.LENGTH_LONG).show()
+            regresarALogin()
         }
     }
 
@@ -63,20 +76,20 @@ class HomeActivity : AppCompatActivity() {
         // Botón de Contactos
         binding.btnContactos.setOnClickListener {
             Log.d(TAG, "Navegando a Contactos")
-            val intent = Intent(this, ContactosActivity::class.java)
-            // Ahora 'usuarioId' y 'nombreUsuario' son accesibles aquí
-            intent.putExtra("USUARIO_ID", usuarioId)
-            intent.putExtra("NOMBRE_USUARIO", nombreUsuario)
+            val intent = Intent(this, ContactosActivity::class.java).apply {
+                putExtra("USUARIO_ID", usuarioId)
+                putExtra("NOMBRE_USUARIO", nombreUsuario)
+            }
             startActivity(intent)
         }
 
         // Botón de Recordatorios
         binding.btnRecordatorios.setOnClickListener {
             Log.d(TAG, "Navegando a Recordatorios")
-            val intent = Intent(this, RecordatoriosActivity::class.java)
-            // También son accesibles aquí
-            intent.putExtra("USUARIO_ID", usuarioId)
-            intent.putExtra("NOMBRE_USUARIO", nombreUsuario)
+            val intent = Intent(this, RecordatoriosActivity::class.java).apply {
+                putExtra("USUARIO_ID", usuarioId)
+                putExtra("NOMBRE_USUARIO", nombreUsuario)
+            }
             startActivity(intent)
         }
 
@@ -86,11 +99,10 @@ class HomeActivity : AppCompatActivity() {
             cerrarSesion()
         }
 
-        // Botón de perfil (ejemplo)
+        // Botón de perfil
         binding.btnPerfil.setOnClickListener {
             Log.d(TAG, "Botón perfil presionado")
-            // Aquí puedes navegar a la pantalla de perfil
-            // o mostrar más información del usuario
+            Toast.makeText(this, "Función de perfil próximamente", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -98,8 +110,16 @@ class HomeActivity : AppCompatActivity() {
      * Cierra la sesión y regresa al login
      */
     private fun cerrarSesion() {
-        val intent = Intent(this, LoginActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        regresarALogin()
+    }
+
+    /**
+     * Regresa a la pantalla de login y limpia el stack
+     */
+    private fun regresarALogin() {
+        val intent = Intent(this, LoginActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
         startActivity(intent)
         finish()
     }

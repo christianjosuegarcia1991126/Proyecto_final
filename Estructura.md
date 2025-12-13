@@ -60,7 +60,7 @@ CREATE TABLE usuario (
 ### **Lógica de Seguridad**
 
 - **Máximo de intentos:** 3 intentos fallidos consecutivos
-- **Bloqueo temporal:** 15 minutos después del tercer intento fallido
+- **Bloqueo temporal:** 15 segundos después del tercer intento fallido
 - **Reinicio de contador:** Se resetea `intentos_fallidos` a 0 después de un login exitoso
 - **Hash de contraseña:** Utiliza PBKDF2-SHA256 con salt único por usuario
 
@@ -206,7 +206,7 @@ CREATE INDEX idx_recordatorio_fecha_hora ON recordatorio(fecha, hora);
     - Navega a `HomeActivity`
 6. **Si es incorrecto:**
     - Incrementa `intentos_fallidos`
-    - Si llega a 3, establece `bloqueado_hasta` = ahora + 15 minutos
+    - Si llega a 3, establece `bloqueado_hasta` = ahora + 15 segundos
     - Muestra intentos restantes
 
 #### **Respuestas del Backend:**
@@ -418,7 +418,7 @@ Usuario ve notificación push
 
 ### **Control de Acceso:**
 - Bloqueo automático después de 3 intentos fallidos
-- Timeout de 15 minutos
+- Timeout de 15 segundos
 - Registro de `intentos_fallidos` para auditoría
 
 ---
